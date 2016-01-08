@@ -4,7 +4,7 @@ import random
 import sys
 import argparse
 import math
-
+from taskModel import task
 
 # Using uuniFast to generate the task utilization
 def uuniFast(taskNumber, totalUtil):
@@ -43,9 +43,14 @@ def periodGenerator(Tmin,Tmax,Tg):
     
 
 def main():
+    taskset = []
     v = uuniFast(5, 2)
-    for i in range(5):
-        print periodGenerator(20,200,1) 
-
+    for i in range(len(v)):
+        T = periodGenerator(20,200,1)
+        taskset.append(task(i, int(T * v[i]), T))
+        
+    for i in taskset:
+        print i.print_task()
+    
 if __name__ == "__main__":
     main()
