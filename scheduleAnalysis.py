@@ -1,7 +1,12 @@
 #!/usr/bin/python
 import math
 from taskModel import task
-
+"""
+Most of theoretical foundations are from the following paper,
+    Fengxiang Zhang; Burns, A., 
+    "Schedulability Analysis for Real-Time Systems with EDF Scheduling," 
+    in Computers, IEEE Transactions on , vol.58, no.9, pp.1250-1258, Sept. 2009
+"""
 def QPA(taskset):
     currTaskSet = taskset
     totalUtil = sum([i.utilization for i in currTaskSet])
@@ -38,9 +43,6 @@ def DBF(t,taskset):
 """
 Compute the bound used for DBF test. 
 The bound is computed using Eq. (7) from QPA papaer.
-    Fengxiang Zhang; Burns, A., 
-    "Schedulability Analysis for Real-Time Systems with EDF Scheduling," 
-    in Computers, IEEE Transactions on , vol.58, no.9, pp.1250-1258, Sept. 2009
 """
 def compute_bound(taskset, U):
     w0 = sum([i.wcet for i in taskset])
