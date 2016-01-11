@@ -1,13 +1,16 @@
 
 
 class task:
-    def __init__(self, id, C, P):
+    def __init__(self, id, C,P, D=0):
         self.id = id
         self.wcet = C
         self.period = P
-        self.deadline = P
+        if D != 0:
+            self.deadline = D
+        else:
+            self.deadline = P
         self.criticality = 0
-        self.utilization = self.wcet / self.period
+        self.utilization = self.wcet / float(self.period)
         
     def get_WCET(self):
         return self.wcet
@@ -25,5 +28,5 @@ class task:
         """
         Jan-8-2016: only print out id, wcet and period
         """
-        return "id: %s WCET: %s Period: %s" %(self.id, self.wcet, self.period)
+        return "id: %s WCET: %s Deadline: %s Period: %s" %(self.id, self.wcet, self.deadline, self.period)
     
