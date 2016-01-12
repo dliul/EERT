@@ -42,6 +42,16 @@ def periodGenerator(Tmin,Tmax,Tg):
     r = random.uniform(math.log(Tmin),math.log(Tmax + Tg))
     return math.floor(math.exp(r) / Tg) * Tg
     
+def generateTasks(utilization, taskNum):
+    """
+        Generate synthetic taskset based on utilization and task Num
+    """
+    v = uuniFast(5, 1)
+    taskset = []
+    for i in range(len(v)):
+        T = periodGenerator(20,200,1)
+        taskset.append(task(i, int(T * v[i]), T))
+    return taskset
 
 def main():
     taskset = []
@@ -53,10 +63,7 @@ def main():
     taskset.append(task(6,2,12,16))
     taskset.append(task(7,10,280,120))
     taskset.append(task(8,26,660,160))
-##    v = uuniFast(5, 1)
-##    for i in range(len(v)):
-##        T = periodGenerator(20,200,1)
-##        taskset.append(task(i, int(T * v[i]), T))
+
         
     for i in taskset:
         print i.print_task()
