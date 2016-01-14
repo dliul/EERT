@@ -8,7 +8,7 @@ from taskModel import task
 from scheduleAnalysis import QPA
 
 # Using uuniFast to generate the task utilization
-def uuniFast(taskNumber, totalUtil):
+def uuniFast(totalUtil, taskNumber):
     sumU = totalUtil
     vectU = [];
     for i in range(1, taskNumber):
@@ -46,11 +46,12 @@ def generateTasks(utilization, taskNum):
     """
         Generate synthetic taskset based on utilization and task Num
     """
-    v = uuniFast(5, 1)
+    v = uuniFast(taskNum, utilization)
     taskset = []
     for i in range(len(v)):
         T = periodGenerator(20,200,1)
-        taskset.append(task(i, int(T * v[i]), T))
+        C = T * v[i]
+        taskset.append(task(i, C, T))
     return taskset
 
 def main():

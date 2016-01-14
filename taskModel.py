@@ -1,9 +1,11 @@
-
+#!/usr/bin/python
+import random
 
 class task:
-    def __init__(self, id, C,P, D=0):
+    def __init__(self, id, C, P, D=0):
         self.id = id
         self.wcet = C
+        self.coefficient = random.uniform(1.8, 2.3)
         self.period = P
         if D != 0:
             self.deadline = D
@@ -18,6 +20,9 @@ class task:
     def get_Period(self):
         return self.period
     
+    def get_coefficient(self):
+        return self.coefficient
+    
     def get_Deadline(self):
         return self.deadline
     
@@ -28,5 +33,6 @@ class task:
         """
         Jan-8-2016: only print out id, wcet and period
         """
-        return "id: %s WCET: %s Deadline: %s Period: %s" %(self.id, self.wcet, self.deadline, self.period)
+        return "id: %s WCET(PE): %s WCET(EE): %s Deadline: %s Period: %s Utilization: %s" \
+                %(self.id, self.wcet, self.wcet*self.coefficient, self.deadline, self.period,self.utilization)
     
