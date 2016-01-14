@@ -16,6 +16,8 @@ class processor:
         self.currentFreq = max(freqSet)
         self.mappedTasks = []
         self.util = 0
+        # flag to indicate whether the processor already has split task
+        self.split = False
         
     def get_id(self):
         return self.id
@@ -36,6 +38,9 @@ class processor:
     def get_static(self):
         return self.static
     
+    def already_split(self):
+        return self.split
+        
     def get_freqSet(self):
         return self.freqSet
     
@@ -101,9 +106,10 @@ def main():
         For test
     """
     cl = cluster(1, "ARM Cortex A15", 3)
-    cl.add_processor(processor(1,"ARM Cortex A15",3.0e-9,2.261,0.5,[1000,2000,3000]))
-    cl.add_processor(processor(2,"ARM Cortex A15",3.0e-9,2.261,0.5,[1000,2000,3000]))
-    cl.add_processor(processor(3,"ARM Cortex A15",3.0e-9,2.261,0.5,[1000,2000,3000]))
+    freqBig = [800,1000,1200,1400,1600,1800,2000]
+    cl.add_processor(processor(1,"ARM Cortex A15",3.0e-9,2.261,0.5,freqBig))
+    cl.add_processor(processor(2,"ARM Cortex A15",3.0e-9,2.261,0.5,freqBig))
+    cl.add_processor(processor(3,"ARM Cortex A15",3.0e-9,2.261,0.5,freqBig))
     taskset = TG.generateTasks(6, 2)
     
     print cl.printout_cluster()
@@ -111,13 +117,17 @@ def main():
         print i.print_task()
     print "total utilization: %s" %(sum([i.get_utilization() for i in taskset]))
     fd = bp.FFD(taskset, cl)
+    print "==================================================================="
+    print "==================================================================="
     print "FFD"
     for i in fd.get_allProcessors():
         print "processor %s" %i.get_id()
         print i.printout_proc()
         print i.printout_tasks()
-    bd = bp.WFD(taskset, cl)
-    print "BFD"
+    bd = bp.FFD_split(taskset, cl)
+    print "==================================================================="
+    print "==================================================================="
+    print "FFD with split"
     for i in bd.get_allProcessors():
         print "processor %s" %i.get_id()
         print i.printout_proc()

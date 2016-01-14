@@ -10,7 +10,7 @@ Most of theoretical foundations are from the following paper,
 def QPA(taskset):
     currTaskSet = taskset
     totalUtil = sum([i.utilization for i in currTaskSet])
-    assert totalUtil <= 1
+    #assert totalUtil <= 1
     L = compute_bound(taskset,totalUtil)
     #print "L",L
     t = compute_dmax(L,taskset)
@@ -26,14 +26,14 @@ def QPA(taskset):
         ht = DBF(t,currTaskSet)
     print "t = %s,   h(t) = %s" %(t, ht)
     if ht <= dmin :
-        return "schedulable"
+        return -1
     else:
-        return "unschedulable"
+        return t
                 
          
 
 """
-Demand bound function
+Demand bound function for a taskset
 """
 def DBF(t,taskset):
     dbf = sum([max(0,1+ math.floor((t - i.deadline)/i.period))*i.wcet for i in \

@@ -5,6 +5,7 @@ class task:
     def __init__(self, id, C, P, D=0):
         self.id = id
         self.wcet = C
+        # coefficient for the heterogeneous platform
         self.coefficient = random.uniform(1.8, 2.3)
         self.period = P
         if D != 0:
@@ -13,17 +14,20 @@ class task:
             self.deadline = P
         self.criticality = 0
         self.utilization = self.wcet / float(self.period)
-        
-    def get_WCET(self):
+    
+    def get_id(self):
+        return self.id
+    
+    def get_wcet(self):
         return self.wcet
     
-    def get_Period(self):
+    def get_period(self):
         return self.period
     
     def get_coefficient(self):
         return self.coefficient
     
-    def get_Deadline(self):
+    def get_deadline(self):
         return self.deadline
     
     def get_utilization(self):
