@@ -17,14 +17,14 @@ def QPA(taskset):
     #print "t",t
     dmin = min([i.deadline for i in taskset])
     ht = DBF(t,currTaskSet)
-    while  ht <= t and ht >= dmin:
-        print "t = %s,   h(t) = %s" %(t, ht)
+    while  ht <= t and ht > dmin:
+        # print "t = %s,   h(t) = %s" %(t, ht)
         if ht < t:
             t = ht
         else:
             t = compute_dmax(t, taskset)
         ht = DBF(t,currTaskSet)
-    print "t = %s,   h(t) = %s" %(t, ht)
+    #print "t = %s,   h(t) = %s" %(t, ht)
     if ht <= dmin :
         return -1
     else:
@@ -36,8 +36,7 @@ def QPA(taskset):
 Demand bound function for a taskset
 """
 def DBF(t,taskset):
-    dbf = sum([max(0,1+ math.floor((t - i.deadline)/i.period))*i.wcet for i in \
-                taskset])
+    dbf = sum([math.floor((t+i.period-i.deadline)/i.period)*i.wcet for i in taskset])
     return dbf
 
 """
@@ -72,7 +71,7 @@ def compute_dmax(t, taskset):
     tmp_dmax = 0
     dj = 0
     for i in taskset:
-        if i.deadline < t:
+        if i.deadline <= t:
             dj = math.floor((t - i.deadline) / i.period)*i.period + i.deadline
             if dj == t:
                 dj = dj - i.period

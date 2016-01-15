@@ -17,7 +17,8 @@ class processor:
         self.mappedTasks = []
         self.util = 0
         # flag to indicate whether the processor already has split task
-        self.split = False
+        self.split_1 = False
+        self.split_2 = False
         
     def get_id(self):
         return self.id
@@ -38,8 +39,17 @@ class processor:
     def get_static(self):
         return self.static
     
-    def already_split(self):
-        return self.split
+    def set_split_1(self):
+        self.split_1 = True
+        
+    def get_split_1(self):
+        return self.split_1
+
+    def set_split_2(self):
+        self.split_2 = True
+        
+    def get_split_2(self):
+        return self.split_2
         
     def get_freqSet(self):
         return self.freqSet
@@ -53,6 +63,10 @@ class processor:
     def get_totalUtil(self):
         return self.util
     
+    def remove_task(self,task):
+        self.get_alltasks().remove(task)
+        self.util -= task.get_utilization()
+        
     def map_one_task(self,t):
         assert isinstance(t,task) == True, "mapped object is %s, not a task type " %type(t)
         self.mappedTasks.append(t)
