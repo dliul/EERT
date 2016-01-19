@@ -60,6 +60,9 @@ class processor:
     def get_alltasks(self):
         return self.mappedTasks
     
+    def has_task(self):
+        return len(self.get_alltasks()) != 0
+    
     def get_totalUtil(self):
         return self.util
     
@@ -124,33 +127,53 @@ def main():
     cl.add_processor(processor(1,"ARM Cortex A15",3.0e-9,2.261,0.5,freqBig))
     cl.add_processor(processor(2,"ARM Cortex A15",3.0e-9,2.261,0.5,freqBig))
     cl.add_processor(processor(3,"ARM Cortex A15",3.0e-9,2.261,0.5,freqBig))
-    taskset = TG.generateTasks(6, 2)
+
+    winner = 0
+    for t in range(100):
+        ffd = 0
+        ffd_split = 0
+        taskset = TG.generateTasks(6, 2)
+        
+        print cl.printout_cluster()
+##        for i in taskset:
+##            print i.print_task()
+##        print "total utilization: %s" %(sum([i.get_utilization() for i in taskset]))
+        fd = bp.FFD(taskset, cl)
+        print "==================================================================="
+        print "==================================================================="
+        print "FFD"
+        cnt = 0
+        for i in fd.get_allProcessors():
+            print "processor %s" %i.get_id()
+            print i.printout_proc()
+            print i.printout_tasks()
+            if i.has_task():
+                cnt += 1
+        if cnt == 2:
+            ffd += 1
+        bd = bp.FFD_split_test(taskset, cl)
+        print "==================================================================="
+        print "==================================================================="
+        print "FFD with split"
+        cnt = 0
+        for i in bd.get_allProcessors():
+            print "processor %s" %i.get_id()
+            print i.printout_proc()
+            print i.printout_tasks()
+            if i.has_task():
+                cnt += 1
+        if cnt == 2:
+            ffd_split += 1
     
-    print cl.printout_cluster()
-    for i in taskset:
-        print i.print_task()
-    print "total utilization: %s" %(sum([i.get_utilization() for i in taskset]))
-    fd = bp.FFD(taskset, cl)
-    print "==================================================================="
-    print "==================================================================="
-    print "FFD"
-    for i in fd.get_allProcessors():
-        print "processor %s" %i.get_id()
-        print i.printout_proc()
-        print i.printout_tasks()
-    bd = bp.FFD_split(taskset, cl)
-    print "==================================================================="
-    print "==================================================================="
-    print "FFD with split"
-    for i in bd.get_allProcessors():
-        print "processor %s" %i.get_id()
-        print i.printout_proc()
-        print i.printout_tasks()
-    #proc_test.map_one_task(task(1,6000,31000,18000))
-    #proc_test.map_one_task(task(2,2000,9800,9000))
-    #print proc_test.printout_tasks()
-    #print proc_test.printout_proc()
-    #print proc_test.get_totalUtil()
-    
+        print "ffd:", ffd, "ffd_split:", ffd_split
+        if ffd - ffd_split > 0:
+            winner += 1
+    print "FFD Split is better in %s sets" %winner
+        #proc_test.map_one_task(task(1,6000,31000,18000))
+        #proc_test.map_one_task(task(2,2000,9800,9000))
+        #print proc_test.printout_tasks()
+        #print proc_test.printout_proc()
+        #print proc_test.get_totalUtil()
+        
 if __name__ == "__main__":
     main()

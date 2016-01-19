@@ -50,7 +50,9 @@ def generateTasks(utilization, taskNum):
     taskset = []
     for i in range(len(v)):
         T = periodGenerator(20,200,1)
-        C = T * v[i]
+        C = math.floor(T * v[i])
+        if C == 0:
+            C = 1
         taskset.append(task(i, C, T))
     return taskset
 
